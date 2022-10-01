@@ -10,15 +10,15 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 
-
 interface WebService {
     @FormUrlEncoded
     @POST("login/")
     suspend fun signIn(
-        @Field("email") email:String, @Field("password") password:String): LoginResponse
+        @Field("email") email: String, @Field("password") password: String
+    ): LoginResponse
 }
 
-object RetrofitClient{
+object RetrofitClient {
     val webService: WebService by lazy {
         Retrofit.Builder()
             .baseUrl(AppConstants.BASE_URL)
