@@ -5,21 +5,24 @@ import com.example.map.data.model.UserResponse
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 
 
 interface WebService {
-
-    @POST("login")
-    suspend fun signIn(@Body email:String, password:String): UserResponse
+    @FormUrlEncoded
+    @POST("login/")
+    suspend fun signIn(
+        @Field("email") email:String, @Field("password") password:String): UserResponse
 }
 
 object RetrofitClient{
-    val webService by lazy {
+    val webService: WebService by lazy {
         Retrofit.Builder()
             .baseUrl(AppConstants.BASE_URL)
+
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build().create(WebService::class.java)
 

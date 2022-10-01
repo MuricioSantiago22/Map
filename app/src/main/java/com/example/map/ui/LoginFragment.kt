@@ -1,10 +1,18 @@
 package com.example.map.ui
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -19,6 +27,9 @@ import com.example.map.presentation.UserViewModelFactory
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
+    companion object {
+        const val MY_CHANNEL_ID = "myChannel"
+    }
 
     private lateinit var binding: FragmentLoginBinding
     private val viewModel by viewModels<UserViewModel>{UserViewModelFactory(UserRepoImpl(
@@ -29,11 +40,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
-        doLogin()
+        addOnClickListener()
+
     }
 
 
-    private fun doLogin(){
+    private fun addOnClickListener(){
         binding.btnSignin.setOnClickListener {
             val email = binding.editTextEmail.text.toString().trim()
             val password= binding.editTextPassword.text.toString().trim()
