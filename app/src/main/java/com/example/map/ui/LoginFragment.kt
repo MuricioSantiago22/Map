@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -41,16 +40,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
         addOnClickListener()
-
+        createChannel()
     }
 
 
     private fun addOnClickListener(){
         binding.btnSignin.setOnClickListener {
-            val email = binding.editTextEmail.text.toString().trim()
+            /*val email = binding.editTextEmail.text.toString().trim()
             val password= binding.editTextPassword.text.toString().trim()
             validateCredentials(email, password)
-            singIn(email, password)
+            singIn(email, password)*/
+            createSimpleNotification()
         }
     }
 
@@ -89,6 +89,49 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         })
 
+    }
+
+    private fun createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                MY_CHANNEL_ID,
+                "MySuperChannel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = ""
+            }
+
+            val notificationManager: NotificationManager =
+                activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun createSimpleNotification() {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val flag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, flag)
+
+        context?.let { _context ->
+            val builder = NotificationCompat.Builder(_context, MY_CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_delete)
+                .setContentTitle("My title")
+                .setContentText("Esto es un ejemplo <3")
+                .setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .bigText(" lita ")
+                )
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+            with(NotificationManagerCompat.from(_context)) {
+                notify(1, builder.build())
+            }
+        }
     }
 
 }
