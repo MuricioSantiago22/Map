@@ -1,7 +1,7 @@
 package com.example.map.data.repository
 
 import com.example.map.application.AppConstants
-import com.example.map.data.model.UserResponse
+import com.example.map.data.model.LoginResponse
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,7 +15,7 @@ interface WebService {
     @FormUrlEncoded
     @POST("login/")
     suspend fun signIn(
-        @Field("email") email:String, @Field("password") password:String): UserResponse
+        @Field("email") email:String, @Field("password") password:String): LoginResponse
 }
 
 object RetrofitClient{

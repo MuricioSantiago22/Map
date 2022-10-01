@@ -25,6 +25,7 @@ import com.example.map.presentation.UserViewModel
 import com.example.map.presentation.UserViewModelFactory
 
 
+
 class LoginFragment : Fragment(R.layout.fragment_login) {
     companion object {
         const val MY_CHANNEL_ID = "myChannel"
@@ -46,22 +47,23 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun addOnClickListener(){
         binding.btnSignin.setOnClickListener {
-            /*val email = binding.editTextEmail.text.toString().trim()
+           val email = binding.editTextEmail.text.toString().trim()
             val password= binding.editTextPassword.text.toString().trim()
             validateCredentials(email, password)
-            singIn(email, password)*/
-            createSimpleNotification()
+            singIn(email, password)
+
         }
     }
 
     private fun validateCredentials(email: String, password : String) {
         if (email.isEmpty()){
             binding.editTextEmail.error = "E-mail is empty"
-            return
+
         }
 
         if (password.isEmpty()){
             binding.editTextPassword.error= "Password is empty"
+
         }
     }
 
@@ -74,7 +76,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
                 is Resource.Success ->{
                     binding.progressBar.visibility = View.GONE
+                    result.data.code
                     findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                    result.data.code?.let { createSimpleNotification(it) }
                 }
                 is Resource.Failure ->{
                     binding.progressBar.visibility = View.GONE
@@ -108,9 +112,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun createSimpleNotification() {
+    private fun createSimpleNotification( message:Int) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
         }
 
         val flag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
@@ -118,13 +123,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         context?.let { _context ->
             val builder = NotificationCompat.Builder(_context, MY_CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_delete)
-                .setContentTitle("My title")
-                .setContentText("Esto es un ejemplo <3")
-                .setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(" lita ")
-                )
+                .setSmallIcon(android.R.drawable.ic_dialog_map)
+                .setContentTitle("${message}")
+                .setContentText("Bienvenido")
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
