@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.util.PatternsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -23,7 +24,7 @@ import com.example.map.data.repository.UserRepoImpl
 import com.example.map.databinding.FragmentLoginBinding
 import com.example.map.presentation.UserViewModel
 import com.example.map.presentation.UserViewModelFactory
-
+import java.util.regex.Pattern
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -36,34 +37,61 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         UserDataSource(webService)
     ))}
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
-        addOnClickListener()
+        validate()
         createChannel()
     }
 
 
-    private fun addOnClickListener(){
-        binding.btnSignin.setOnClickListener {
-           val email = binding.editTextEmail.text.toString().trim()
-            val password= binding.editTextPassword.text.toString().trim()
-            validateCredentials(email, password)
-            singIn(email, password)
 
+
+    private fun validate(){
+        binding.btnSignin.setOnClickListener {
+            val result = arrayOf(validateEmail(), validatePassword())
+            if (false in result){
+                return@setOnClickListener
+            }else(singIn(email = String(), password = String()))
         }
     }
 
-    private fun validateCredentials(email: String, password : String) {
-        if (email.isEmpty()){
+    private fun validateEmail() : Boolean{
+        val email = binding.editTextEmail.text.toString()
+        return if (email.isEmpty()){
             binding.editTextEmail.error = "E-mail is empty"
-
+            false
+        }else if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.editTextEmail.error = "Please enter a valid email address"
+            false
+        }else{
+            binding.editTextEmail.error = null
+            true
         }
+    }
 
-        if (password.isEmpty()){
-            binding.editTextPassword.error= "Password is empty"
+    private fun validatePassword() : Boolean{
 
+        val password= binding.editTextPassword.text.toString()
+        val passwordRegex = Pattern.compile(
+            "^"+
+                    "(?=.*[0-9])"+           // al menos un numero
+                    "(?=.*[a-z])"+           // al menos una letra minúscula
+                    "(?=.*[A-Z])"+           // al menos una letra mayúscula
+                    "(?=.*[@#$%^^+=])"+      //al menos un carácter especial
+                    "(?=\\S+$)" +            // sin espacios
+                    ".{0,}"+                 // más de cuatro letras
+                    "$"
+        )
+        return if (password.isEmpty()){
+            binding.editTextPassword.error= "Field can not is empty"
+            false
+        }else if (!passwordRegex.matcher(password).matches()){
+            binding.editTextPassword.error = "Password is too weak"
+            false
+        }else{
+            binding.editTextPassword.error = null
+            true
         }
     }
 
@@ -90,9 +118,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     ).show()
                 }
             }
-
         })
-
     }
 
     private fun createChannel() {
@@ -115,7 +141,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun createSimpleNotification( message:Int) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
         }
 
         val flag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
@@ -133,6 +158,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 notify(1, builder.build())
             }
         }
-    }
 
+    }
 }

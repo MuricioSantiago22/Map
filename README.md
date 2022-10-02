@@ -1,7 +1,9 @@
 # Map
-clonar repositorio
-abrir con Android Studio
-correr app
-ingresar e-mail
-ingresar contraseña
-dar click en el boton 
+- Clonar repositorio
+- Abrir con Android Studio
+- Correr App
+- Ingresar E-mail. Solicita parámetros ("." y "@")
+- Ingresar contraseña. NOTA: la contraseña debe contener  caracteres especiales ($%&), números, letras
+  minúsculas y mayúsculas
+- Dar click en el botón "SIGN IN"
+
