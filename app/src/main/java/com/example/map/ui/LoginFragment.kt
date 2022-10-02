@@ -75,7 +75,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val password= binding.editTextPassword.text.toString()
         val passwordRegex = Pattern.compile(
             "^"+
-                    "(?=.*[0-9])"+           // al menos un numero
+                    "(?=.*[0-9])"+           // al menos un número
                     "(?=.*[a-z])"+           // al menos una letra minúscula
                     "(?=.*[A-Z])"+           // al menos una letra mayúscula
                     "(?=.*[@#$%^^+=])"+      //al menos un carácter especial
@@ -105,7 +105,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 is Resource.Success ->{
                     binding.progressBar.visibility = View.GONE
                     result.data.code
-                    findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_mapsFragment2)
                     result.data.code?.let { createSimpleNotification(it) }
                 }
                 is Resource.Failure ->{

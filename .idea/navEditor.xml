@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_loginFragment_to_mapFragment">
+                            <entry key="action_loginFragment_to_mapsFragment2">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -29,7 +29,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="mapFragment">
+                  <entry key="mapsFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
