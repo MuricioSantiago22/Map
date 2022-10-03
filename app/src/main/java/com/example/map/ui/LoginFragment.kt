@@ -42,9 +42,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding = FragmentLoginBinding.bind(view)
         validate()
         createChannel()
+        //show()
     }
 
+    private fun show(email: String, password: String) {
 
+
+    }
 
 
     private fun validate(){
@@ -105,7 +109,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 is Resource.Success ->{
                     binding.progressBar.visibility = View.GONE
                     result.data.code
-                    findNavController().navigate(R.id.action_loginFragment_to_mapsFragment2)
+                    findNavController().navigate(R.id.action_loginFragment_to_map)
                     result.data.code?.let { createSimpleNotification(it) }
                 }
                 is Resource.Failure ->{
