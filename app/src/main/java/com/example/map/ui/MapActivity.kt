@@ -2,6 +2,7 @@ package com.example.map.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener{
 
     private lateinit var map: GoogleMap
 
@@ -27,6 +28,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         createMarker()
+        map.setOnMyLocationButtonClickListener(this)
+        map.setOnMyLocationClickListener(this)
         enableLocation()
     }
 
@@ -103,6 +106,24 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
        }
     }
 
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        if(!isLocationPermissionsGranted()){
+            map.isMyLocationEnabled = false
+            Toast.makeText(this, "Para activar la localización acpeta los permisos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onMyLocationButtonClick(): Boolean {
+        Toast.makeText(this, "Boton pulsado", Toast.LENGTH_SHORT).show()
+        return false
+
+    }
+
+    override fun onMyLocationClick(p0: Location) {
+        Toast.makeText(this, " Estas en ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()
+
+    }
 
 
 }
