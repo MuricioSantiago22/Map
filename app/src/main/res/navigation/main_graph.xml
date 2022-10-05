@@ -9,14 +9,5 @@
         android:id="@+id/loginFragment"
         android:name="com.example.map.ui.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_map"
-            app:destination="@id/map" />
-    </fragment>
-    <activity
-        android:id="@+id/map"
-        android:name="com.example.map.ui.Map"
-        android:label="activity_map"
-        tools:layout="@layout/activity_map" />
+        tools:layout="@layout/fragment_login" />
 </navigation>

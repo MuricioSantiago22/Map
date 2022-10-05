@@ -56,7 +56,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val result = arrayOf(validateEmail(), validatePassword())
             if (false in result){
                 return@setOnClickListener
-            }else(singIn(email = String(), password = String()))
+            }
+            else {
+                val intent = Intent(context, MapActivity::class.java)
+                activity?.startActivity(intent)
+                //findNavController().navigate(R.id.action_loginFragment_to_map)
+            }
         }
     }
 
@@ -109,7 +114,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 is Resource.Success ->{
                     binding.progressBar.visibility = View.GONE
                     result.data.code
-                    findNavController().navigate(R.id.action_loginFragment_to_map)
                     result.data.code?.let { createSimpleNotification(it) }
                 }
                 is Resource.Failure ->{
