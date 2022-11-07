@@ -42,13 +42,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding = FragmentLoginBinding.bind(view)
         validate()
         createChannel()
-        //show()
-    }
-
-    private fun show(email: String, password: String) {
-
 
     }
+
 
 
     private fun validate(){
