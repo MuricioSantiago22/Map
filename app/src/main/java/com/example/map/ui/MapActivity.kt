@@ -108,9 +108,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        if(!isLocationPermissionsGranted()){
+        if(::map.isInitialized && !isLocationPermissionsGranted()){
             map.isMyLocationEnabled = false
-            Toast.makeText(this, "Para activar la localización acpeta los permisos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Para activar la localización acepta los permisos", Toast.LENGTH_SHORT).show()
         }
     }
 
